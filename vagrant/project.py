@@ -8,20 +8,20 @@ app = Flask(__name__)
 engine = create_engine('sqlite:///restaurantmenu.db')
 Base.metadata.bind = engine
 
-# DBSession = sessionmaker(bind=engine)
-# session = DBSession()
+DBSession = sessionmaker(bind=engine)
+session = DBSession()
 
-# @app.route('/')
+@app.route('/')
 @app.route('/restaurants/<int:restaurant_id>/')
 def restaurantMenu(restaurant_id):
-    DBSession = sessionmaker(bind=engine)
-    session = DBSession()
+    # DBSession = sessionmaker(bind=engine)
+    # session = DBSession()
     restaurant = session.query(Restaurant).filter_by(id=restaurant_id).one()
     items = session.query(MenuItem).filter_by(restaurant_id = restaurant.id)
     return render_template('menu.html', restaurant=restaurant, items=items)
 
-@app.route('/')
-@app.route('/restaurants/<int:restaurant_id>/new/', methods={'GET', 'POST'})
+# @app.route('/')
+@app.route('/restaurant/<int:restaurant_id>/new/', methods=['GET', 'POST'])
 def newMenuItem(restaurant_id):
     if request.method == 'POST':
         newItem = MenuItem(name = request.form['name'], restaurant_id = restaurant_id)
@@ -31,11 +31,11 @@ def newMenuItem(restaurant_id):
     else:
         return render_template('newmenuitem.html', restaurant_id = restaurant_id)
 
-@app.route('/restaurants/<int:restaurant_id>/<int:menu_id>/edit/')
+@app.route('/restaurant/<int:restaurant_id>/<int:menu_id>/edit/')
 def editMenuItem(restaurant_id, menu_id):
     return "page to edit a new menu item. Task 2 complete!"
 
-@app.route('/restaurants/<int:restaurant_id>/delete/')
+@app.route('/restaurant/<int:restaurant_id>/delete/')
 def deleteMenuItem(restaurant_id):
     return "page to delete a new menu item. Task 3 complete!"
 
