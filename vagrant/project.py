@@ -26,7 +26,7 @@ def menuitemJSON(restaurant_id, menu_id):
     Menu_Item = session.query(MenuItem).filter_by(id=menu_id).one()
     return jsonify(MenuItem = Menu_Item.serialize)
 
-@app.route('restaurant/JSON')
+@app.route('/restaurant/JSON')
 def restaurantsJSON():
     DBSession = sessionmaker(bind=engine)
     session = DBSession()
@@ -35,7 +35,7 @@ def restaurantsJSON():
 
 @app.route('/')
 @app.route('/restaurant/')
-def showRestaurats():
+def showRestaurants():
     DBSession = sessionmaker(bind=engine)
     session = DBSession()
     restaurants = session.query(Restaurant).all()
@@ -67,7 +67,8 @@ def editRestaurant(restaurant_id):
 def deleteRestaurant(restaurant_id):
     DBSession = sessionmaker(bind=engine)
     session = DBSession()
-    restaurantToDelete = session.query(Restaurant).filter_by(id=restaurant_id).one()
+    restaurantToDelete = session.query(
+        Restaurant).filter_by(id=restaurant_id).one()
     if request.method == 'POST':
         session.delete(restaurantToDelete)
         session.commit()
@@ -99,7 +100,7 @@ def newMenuItem(restaurant_id):
         return render_template('newmenuitem.html', restaurant_id=restaurant_id)
 
 @app.route('/restaurant/<int:restaurant_id>/menu/<int:menu_id>/edit', methods=['GET', 'POST'])
-def editedMenuItem(restaurant_id, menu_id):
+def editMenuItem(restaurant_id, menu_id):
     DBSession = sessionmaker(bind=engine)
     session = DBSession()
     editedItem = session.query(MenuItem).filter_by(id=menu_id).one()
